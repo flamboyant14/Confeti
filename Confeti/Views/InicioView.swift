@@ -225,7 +225,7 @@ struct AprenderView: View {
     }
 }
 
-/// Los cuatro juegos de palabras y números.
+/// Los juegos de palabras, números y operaciones matemáticas.
 struct JuegosView: View {
     private let elegir: (ModoJuego) -> Void
     private let columnas = [GridItem(.flexible(), spacing: 32), GridItem(.flexible(), spacing: 32)]
@@ -242,18 +242,28 @@ struct JuegosView: View {
                     EstrellasJugador()
                 }
                 GeometryReader { geo in
-                    let alto = max((geo.size.height - 32 - 80) / 2, 180)
-                    LazyVGrid(columns: columnas, spacing: 32) {
-                        tarjeta(.adivina, titulo: "¿Dónde está?", subtitulo: "Encuentra el dibujo", color: .rosa, imagen: "gato", texto: nil)
-                            .frame(height: alto)
-                        tarjeta(.primeraLetra, titulo: "¿Con qué empieza?", subtitulo: "Busca la primera letra", color: .azul, imagen: "manzana", texto: "M")
-                            .frame(height: alto)
-                        tarjeta(.escribe, titulo: "Escribe", subtitulo: "Traza el nombre del dibujo", color: .turquesa, imagen: "taco", texto: nil)
-                            .frame(height: alto)
-                        tarjeta(.cuenta, titulo: "Cuenta y traza", subtitulo: "Cuenta y escribe el número", color: .naranja, imagen: "galleta", texto: "3")
-                            .frame(height: alto)
+                    let alto = max((geo.size.height - 32 - 80) / 4, 150)
+                    ScrollView {
+                        LazyVGrid(columns: columnas, spacing: 32) {
+                            tarjeta(.adivina, titulo: "¿Dónde está?", subtitulo: "Encuentra el dibujo", color: .rosa, imagen: "gato", simbolo: nil)
+                                .frame(height: alto)
+                            tarjeta(.primeraLetra, titulo: "¿Con qué empieza?", subtitulo: "Busca la primera letra", color: .azul, imagen: "manzana", simbolo: nil)
+                                .frame(height: alto)
+                            tarjeta(.escribe, titulo: "Escribe", subtitulo: "Traza el nombre del dibujo", color: .turquesa, imagen: "taco", simbolo: nil)
+                                .frame(height: alto)
+                            tarjeta(.cuenta, titulo: "Cuenta y traza", subtitulo: "Cuenta y escribe el número", color: .naranja, imagen: "galleta", simbolo: nil)
+                                .frame(height: alto)
+                            tarjeta(.sumasNiveles, titulo: "Sumas Mágicas", subtitulo: "25 niveles de sumas", color: .morado, imagen: nil, simbolo: "plus.circle.fill")
+                                .frame(height: alto)
+                            tarjeta(.restasNiveles, titulo: "Restas Mágicas", subtitulo: "25 niveles de restas", color: .azul, imagen: nil, simbolo: "minus.circle.fill")
+                                .frame(height: alto)
+                            tarjeta(.multiplicacionesNiveles, titulo: "Multiplica", subtitulo: "25 niveles de tablas", color: .turquesa, imagen: nil, simbolo: "multiply.circle.fill")
+                                .frame(height: alto)
+                            tarjeta(.divisionesNiveles, titulo: "Divisiones Mágicas", subtitulo: "25 niveles de repartir", color: .naranja, imagen: nil, simbolo: "divide.circle.fill")
+                                .frame(height: alto)
+                        }
+                        .padding(40)
                     }
-                    .padding(40)
                 }
             }
         }
@@ -262,21 +272,21 @@ struct JuegosView: View {
         }
     }
 
-    private func tarjeta(_ modo: ModoJuego, titulo: String, subtitulo: String, color: ColorCaramelo, imagen: String, texto: String?) -> some View {
+    private func tarjeta(_ modo: ModoJuego, titulo: String, subtitulo: String, color: ColorCaramelo, imagen: String?, simbolo: String?) -> some View {
         TarjetaJuego(titulo: titulo, subtitulo: subtitulo, color: color, accion: { elegir(modo) }) {
             MedallonBlanco {
-                ZStack(alignment: .bottomTrailing) {
-                    Image(imagen)
-                        .resizable()
-                        .scaledToFit()
-                        .flotando(amplitud: 6, duracion: 1.6, retraso: Double(imagen.count % 4) * 0.25)
-                    if let texto {
-                        Text(texto)
-                            .font(.system(.largeTitle, design: .rounded).weight(.black))
-                            .foregroundStyle(.white)
-                            .frame(width: 64, height: 64)
-                            .background(Circle().fill(color.base))
-                            .overlay(Circle().strokeBorder(Color.white, lineWidth: 4))
+                ZStack(alignment: .center) {
+                    if let imagen {
+                        Image(imagen)
+                            .resizable()
+                            .scaledToFit()
+                            .flotando(amplitud: 6, duracion: 1.6, retraso: Double(imagen.count % 4) * 0.25)
+                    }
+                    if let simbolo {
+                        Image(systemName: simbolo)
+                            .font(.system(size: 72, weight: .bold))
+                            .foregroundStyle(color.base)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
             }

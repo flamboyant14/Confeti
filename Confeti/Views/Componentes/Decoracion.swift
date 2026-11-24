@@ -45,7 +45,7 @@ struct PapelPicado: View {
         let centro = CGPoint(x: r.midX, y: r.minY + r.height * 0.45)
         let radio = min(r.width, r.height) * 0.12
         for k in 0..<6 {
-            let a = Double(k) * .pi / 3
+            let a = CGFloat(k) * .pi / 3 // CoreGraphics FIX
             let c = CGPoint(x: centro.x + cos(a) * radio * 1.4, y: centro.y + sin(a) * radio * 1.4)
             p.addEllipse(in: CGRect(x: c.x - radio * 0.6, y: c.y - radio * 0.6, width: radio * 1.2, height: radio * 1.2))
         }
@@ -89,7 +89,7 @@ struct FlecosPinata: View {
 
 /// Fondo de tarjeta de papel con borde grueso y una sombra sólida abajo.
 extension View {
-    func tarjetaFiesta(borde: Color = .morado, relleno: Color = .papel, radio: CGFloat = 28, conFlecos: Bool = false) -> some View {
+    func tarjetaFiesta(borde: Color = .morado, relleno: Color = .crema, radio: CGFloat = 28, conFlecos: Bool = false) -> some View {
         self
             .background {
                 ZStack(alignment: .top) {
@@ -114,7 +114,6 @@ extension View {
             .shadow(color: .white, radius: 0, x: -2, y: 2)
             .shadow(color: Color.moradoOscuro.opacity(0.35), radius: 0, x: 0, y: 5)
     }
-
 }
 
 /// Título con cada letra de un color y un poco chueca, como letras de piñata.
